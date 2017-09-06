@@ -1,0 +1,149 @@
+var html = document.getElementsByTagName("html")[0];
+window.onload = window.onresize = function() {
+    var width = document.documentElement.clientWidth || document.body.clientWidth;
+    var f = (100/640) * width; //先有个比例这里用的20/520，的比例
+    html.style.fontSize = f + 'px';
+   
+	myScroll = new iScroll('wrapper', {
+		snap: true,
+		hScrollbar: false});
+}	
+
+	jQuery(function ($){
+			 document.body.style.display='block';
+			var sds=null;
+			var sj=1;
+			$.ajaxSetup({ 
+			    async : false 
+			});
+			function ax2(urls,obj){
+			
+				$.ajax({
+					type: "post",
+					url: urls,
+					data:obj,
+					dataType: "json",
+					success: function(data) {
+					sds=data;
+				
+					}
+				});
+			}
+//			进入页面加载的baner等
+			var hm2='';
+			var hm1='';
+			var inx;
+			var ats;
+			ax2("http://jiayuan.meihaojy.com/rest.php?s=web/index",{'method':'fosung.app.web.index','page':sj});
+			var hm3=$('.tabs').eq(0).html();
+			$.each(sds.data.cate,function (it){
+				inx=it+1;
+				hm3+='<li><a href=zhibolist.html?catid='+sds.data.cate[it].catid+'&inx='+inx+' hidefocus="true">'+sds.data.cate[it].cat_name+'</a></li>';
+			})
+			$('.tabs').eq(0).html(hm3);
+			
+			$.each(sds.data.banner, function(is,obj) {
+				if(sds.data.banner[is].banner_type==1){
+					hm1+='<a class="swiper-slide" href=zhiboxiangqing.html?v_id='+sds.data.banner[is].banner_video_id+'>';						
+				}else if(sds.data.banner[is].banner_type==3){
+					hm1+='<a class="swiper-slide" href=xiaoxixiangqing.html?message_id='+sds.data.banner[is].banner_news_id+'>';	
+				}else if(sds.data.banner[is].banner_type==4){
+					hm1+='<a class="swiper-slide" href=zhuanti.html?message_id='+sds.data.banner[is].special_id+'>';	
+				}else {
+					hm1+='<a class="swiper-slide" href='+sds.data.banner[is].banner_url+'>';
+				}
+				hm1+='<img src='+sds.data.banner[is].banner_image+'></a>';
+			});
+			$('#lo').html(hm1);
+			var swiper = new Swiper('.swiper-container', {
+		        pagination: '.swiper-pagination',
+		        autoplay: 3000,
+				loop:true,
+				passiveListeners : false,
+		        autoplayDisableOnInteraction: false
+		    });
+			// 头条加载
+			$.each(sds.data.news,function (it){
+				hm2+='<li>'
+				if(sds.data.news[it].message_type==1){
+					hm2+='<a class="show" href=toutiaoxiangqing.html?message_id='+sds.data.news[it].message_id+'>';	
+				}else if(sds.data.news[it].message_type==2){
+					hm2+='<a class="show" href=zhiboxiangqing.html?v_id='+sds.data.news[it].message_video_id+'>';
+				}
+				hm2+=sds.data.news[it].message_title+'</a></li>';
+			})
+			$('.tout').eq(0).html(hm2);
+			// Video加载
+			var hm = '';
+			
+			$.each(sds.data.video, function (index, obj) {	
+				hm += '<li><a href=zhiboxiangqing.html?v_id='+sds.data.video[index].v_id+'><div class="vi">';
+				hm += '<img class="Lim" src='+sds.data.video[index].v_image+' /><p class="Lzb"><img src="img/ico.png"/>';
+				hm += '<span class="ss">'+sds.data.video[index].v_length_time+'</span></p></div><div class="lzbr">';
+				hm += '<p class="fz">'+sds.data.video[index].v_name+'</p><p class="laiy">';
+				hm += '<span>讲师:'+sds.data.video[index].v_teacher+'</span>';
+				if(sds.data.video[index].v_type=='回顾'){
+					hm += '<img src="img/hg.png"/>';
+				}
+				if(sds.data.video[index].v_type=='直播'){
+					hm += '<img src="img/zb.png"/>';
+				}
+				if(sds.data.video[index].v_type=='预告'){
+					hm += '<img src="img/yug.png"/>';
+				}
+				hm += '</p></div></a></li>';
+				$('.us').get(0).innerHTML=hm;
+			});
+//		点击加载更多
+		$(".linps").on('touchend',function(e){
+				e.preventDefault()
+				e.stopPropagation();
+					sj++;
+			
+					ax2("http://jiayuan.meihaojy.com/rest.php?s=web/index",{'method':'fosung.app.web.index','page':sj});
+					if(sds.data.video.length!=0){
+						$.each(sds.data.video,function (index, obj) {
+						hm += '<li><a href=zhiboxiangqing.html?v_id='+sds.data.video[index].v_id+'><div class="vi">';
+							hm += '<img class="Lim" src='+sds.data.video[index].v_image+'><p class="Lzb"><img src="img/ico.png"/>';
+							hm += '<span class="ss">'+sds.data.video[index].v_length_time+'</span></p></div><div class="lzbr">';
+							hm += '<p class="fz">'+sds.data.video[index].v_name+'</p><p class="laiy">';
+							hm += '<span>讲师:'+sds.data.video[index].v_teacher+'</span>';
+							if(sds.data.video[index].v_type=='回顾'){
+								hm += '<img src="img/hg.png"/>';
+							}
+							if(sds.data.video[index].v_type=='直播'){
+								hm += '<img src="img/zb.png"/>';
+							}
+							if(sds.data.video[index].v_type=='预告'){
+								hm += '<img src="img/yug.png"/>';
+							}
+							hm += '</p></div></a></li>';
+							$('.us').get(0).innerHTML=hm;
+						});
+					}else {
+						$(this).html('已经全部加载完毕');
+					}
+					
+			});
+		}) 
+
+		/****点击下载****/
+		$(".as").eq(0).on('touchstart mousedown',function(e){
+			      $(".as").eq(0).attr("href","http://jiayuan.meihaojy.com/app.php?s=index/down"); 
+		});
+		//点击隐藏
+		$('.cha').eq(0).on('touchstart mousedown',function(e){
+			$(this).parent().hide();
+		})	
+
+// 头条切换
+		function autoScroll(obj){  
+			$(obj).find("ul").animate({  
+				marginTop : "-0.32rem"  
+			},500,function(){  
+				$(this).css({marginTop : "0px"}).find("li:first").appendTo(this);  
+			})  
+		}  
+		$(function(){  
+			setInterval('autoScroll(".apple")',3000);
+		}) 

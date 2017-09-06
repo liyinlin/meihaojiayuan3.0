@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head style="font-size: 100px;">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>美好家园</title>
+		<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+		<link rel="stylesheet" type="text/css" href="css/gongyou.css"/>
+		<link rel="stylesheet" type="text/css" href="css/wenda.css"/>
+		<script src="js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/zoom.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.dotai_1{
+				width: 100%;
+				height: 2rem;
+				float: left;
+			}
+			.dotai_2{
+				width: 48%;
+				height: 2rem;
+				margin-left: 0.08rem;
+				float: left;
+			}
+			.dotai_3,.dotai_4,.dotai_5,.dotai_6{
+				width: 32%;
+				height: 2rem;
+				float: left;
+				margin-left: 0.07rem;
+				margin-top: 0.05rem;
+			}
+			.linps {
+			    text-align: center;
+			    padding: 0.2rem 0;
+			    font-size: 0.28rem;
+			}
+			.xx02 div{
+				background-repeat:no-repeat;
+				background-size: cover;
+			}
+			.tabs a{display:block;float:left;width:14.2%;color:#333;text-align:center;line-height:0.88rem;font-size:0.28rem;text-decoration:none;}
+		</style>
+	</head>
+		<!--头部部分-->
+		<div class="Yhead">
+			<img class="mh" src="img/index1.png"/>
+			<ul class="nav1"> 
+				<li><a href="index.html">首页</a> </li>
+				<li><a href="xiaoxi.html">消息</a> </li>
+				<li><a  class="we"  href="javascript:;">问诊</a> </li>
+				<li><a href="sousu.html"><img class="imss" src="img/sous1.png"/></a> </li>
+			</ul>
+		</div>
+		<!--快速问大部分-->
+		<div class="tabs tabw">
+			<ul class="wenus" id="wenus">
+				<li><a href="#" hidefocus="true" class="active">快速问答</a></li>
+				<li><a href="zhuanjialist.html" hidefocus="false">专家问诊</a></li>
+			</ul>
+		</div>    
+		<div class="kausuwenda">
+			<ul class="ksweus">
+				
+			</ul>
+		</div>
+		<p class="linps">点击加载更多</p>
+		<!--下载页面-->
+		<div class="xiaz">
+			<img class="cha" src="img/cha.png"/>
+			<img class="logo1" src="img/log.png"/>
+			<span><a class="ly-as"  href="">下载</a></span>
+		</div>
+	<body>
+	</body>
+	
+	<script type="text/javascript">
+		jQuery(function ($){
+			var sds=null;
+			var sj=1;
+			$.ajaxSetup({ 
+			    async : false 
+			});
+			function ax1(urls,obj){
+				$.post(urls,obj,function(data) {
+				sds=data;
+				}, "json");
+			}
+			
+			ax1("http://jiayuan.meihaojy.com/rest.php?s=web/index",{'method':'fosung.app.specialist.v3.index','page':sj});
+			var hm1= '';
+			$.each(sds.data.question_data, function(ik,obj) {
+				hm1+='<li><a href=wendaxiangqing.html?question_id='+sds.data.question_data[ik].question_id+'><p class="xxxt">';
+				if(sds.data.question_data[ik].user_thumb==''){
+					hm1+='<img src="img/user@2x.png"/>';
+				}else {
+					hm1+='<img src='+sds.data.question_data[ik].user_thumb+'>';
+				}
+				hm1+='<span class="xt">'+sds.data.question_data[ik].user_name+'</span></p>';
+				hm1+='<h3>'+sds.data.question_data[ik].question_content+'</h3><div class="xx02">'
+				$.each(sds.data.question_data[ik].question_thumb,function (imt){
+					if(sds.data.question_data[ik].question_thumb.length==0){
+						hm1+='';
+					}else if(sds.data.question_data[ik].question_type==2){
+						hm1+='<video controls src='+sds.data.question_data[ik].question_thumb[imt].thumb_url+' style="width:100%;"></video>';
+					}else{
+//						hm1+='<img class=dotai_'+sds.data.question_data[ik].question_thumb.length+' src='+sds.data.question_data[ik].question_thumb[imt].thumb_url+' />';
+						hm1+='<div class=dotai_'+sds.data.question_data[ik].question_thumb.length+' style= background-image:url('+sds.data.question_data[ik].question_thumb[imt].thumb_url+')  />';
+						
+					}
+				})
+				hm1+='</div></a><div class="xttm"><time>'+sds.data.question_data[ik].question_addtime+'</time>';
+				hm1+='<p class="ss"><img class="dj" src="img/wz.png"/><i class="num">'+sds.data.question_data[ik].question_up+'</i><img class="imks" src="img/pl.png"/><i>'+sds.data.question_data[ik].question_comment_count+'</i></p></div></li>';
+			});
+			$('.ksweus').eq(0).html(hm1);
+			
+			$(".linps").on('touchend',function(e){
+				e.preventDefault()
+					sj++;
+					ax1("http://jiayuan.meihaojy.com/rest.php?s=web/index",{'method':'fosung.app.specialist.v3.index','page':sj});
+					if(sds.data.question_data.length!=0){
+						$.each(sds.data.question_data, function(ik,obj) {
+							hm1+='<li><a href=wendaxiangqing.html?question_id='+sds.data.question_data[ik].question_id+'><p class="xxxt">';
+							if(sds.data.question_data[ik].user_thumb==''){
+								hm1+='<img src="img/user@2x.png"/>';
+							}else {
+								hm1+='<img src='+sds.data.question_data[ik].user_thumb+'>';
+							}
+							hm1+='<span class="xt">'+sds.data.question_data[ik].user_name+'</span></p>';
+							hm1+='<h3>'+sds.data.question_data[ik].question_content+'</h3><div class="xx02">'
+							$.each(sds.data.question_data[ik].question_thumb,function (imt){
+								if(sds.data.question_data[ik].question_thumb.length==0){
+									hm1+='';
+								}else if(sds.data.question_data[ik].question_type==2){
+									hm1+='<video controls src='+sds.data.question_data[ik].question_thumb[imt].thumb_url+' style="width:100%;"></video>';
+								}else{
+									hm1+='<div class=dotai_'+sds.data.question_data[ik].question_thumb.length+' style= background-image:url('+sds.data.question_data[ik].question_thumb[imt].thumb_url+')  />';
+								}
+							})
+							hm1+='</div></a><div class="xttm"><time>'+sds.data.question_data[ik].question_addtime+'</time>';
+							hm1+='<p class="ss"><img class="dj" src="img/wz.png"/><i class="num">'+sds.data.question_data[ik].question_up+'</i><img class="imks" src="img/pl.png"/><i>'+sds.data.question_data[ik].question_comment_count+'</i></p></div></li>';
+							
+						});
+						$('.ksweus').eq(0).html(hm1);
+					}else {
+						$(this).html('已经全部加载完毕');
+					}
+			});
+			
+		})
+	</script>
+	<script src="js/xiazai.js" type="text/javascript" charset="utf-8"></script>	
+</html>

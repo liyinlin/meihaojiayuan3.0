@@ -1,0 +1,86 @@
+/**
+ * 调用方法
+ * mlxcun.callApp('方法名','有参数调用')
+ * mlxcun.callApp('方法名')
+ * Android中javascriptInterface为 Fosung
+ *
+ */
+
+function connectWebViewJavascriptBridge(callback) {
+    if (window.WebViewJavascriptBridge) {
+        callback(WebViewJavascriptBridge)
+    } else {
+        document.addEventListener('WebViewJavascriptBridge', function () {
+        	callback(WebViewJavascriptBridge)
+        }, false)
+    }
+}
+
+var mlxcun = {};
+
+mlxcun.userAgent = navigator.userAgent;
+
+mlxcun.osName = function () {
+    return this.userAgent.toLowerCase().indexOf('android') > -1 ? 'android' :
+        this.userAgent.toLowerCase().indexOf('ios') > -1 ? 'ios' : 'undefined';
+}
+
+mlxcun.callApp = function (func, param) {
+    if (this.osName() == 'android') {
+        //调用android的方法
+        if (typeof param == 'undefined') {
+            window.Fosung[func]();
+        } else {
+            window.Fosung[func](param);
+        }
+    } else {
+        //ios调用
+        if (typeof param == 'undefined') {
+            connectWebViewJavascriptBridge(function (bridge) {
+                bridge.callHandler(func, {}, function (response) {
+                    alert(response);
+                })
+            })
+        } else {
+            connectWebViewJavascriptBridge(function (bridge) {
+                bridge.callHandler(func, {'url_rule': param}, function (response) {
+                    alert(response);
+                })
+            })
+        }
+    }
+}
+
+/**
+ *跳转至视频详情页
+ *@param v_id 视频id值 
+ *@param v_detail_type 视频类型，1 专家视频，2用户视频
+ */
+mlxcun.goVideoDetail = function(v_id,v_detail_type){
+	var param='{"v_id":"'+v_id+'","v_detail_type":"'+v_detail_type+'"}';//参数
+	var funcName="showVideo";//方法名。需要和App人员沟通
+	
+    mlxcun.callApp(funcName,param);
+}
+
+/**
+ *跳转至消息详情页
+ *@param message_id 消息id值 
+ */
+mlxcun.goMessageDetail = function(message_id){
+	var param='{"message_id":"'+message_id+'","page":"1","last_id":"0"}';//参数
+	var funcName="showMessage";//方法名。需要和App人员沟通
+	
+	mlxcun.callApp(funcName,param);
+}
+
+/**
+ *跳转至专家详情页
+ *@param message_id 消息id值 
+ */
+mlxcun.goExpertDetail = function(expert_id){
+	var param='{"expert_id":"'+expert_id+'","page":"1","last_id":"0"}';//参数
+	var funcName="showExpert";//方法名。需要和App人员沟通
+	
+	mlxcun.callApp(funcName,param);
+}

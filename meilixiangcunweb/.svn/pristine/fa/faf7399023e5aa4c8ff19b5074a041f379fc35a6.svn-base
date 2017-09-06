@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>测试专家</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css" href="./files/style1.css">
+<link rel="stylesheet" type="text/css" href="./files/swiper.min.css">
+<script type="text/javascript" src="./files/jquery-1.8.3.min.js"></script>
+<script src="./files/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+	.swiper-wrapper .swiper-slide a{
+		color: #000000;
+	}
+	.main_expert,.main_news,.main_video,.main_text{
+		display: none;
+	}
+</style>
+</head>
+<body>
+<div id="box">
+<div class="banner"><img src="./files/58e5ef7e8a4c4.jpg"> </div>
+<div class="main_expert test">
+  <div class="title"><span class="more"><a href="#">查看全部</a></span>推荐专家</div>
+  <div class="content swiper-container swiper-container-horizontal swiper-container-free-mode">
+    <ul class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">
+      <!--<li class="ex_li swiper-slide swiper-slide-active" e_id="267" style="width: 90px; margin-right: 5px;">
+      	
+      	<a href="###"> 
+      		<div class="img"> <img src="./files/banner.jpg">
+	          <div class="name">刘法舜</div>
+	        </div>
+      	</a>
+      </li>-->
+      <div class="clear"></div>
+    </ul>
+  </div>
+</div>
+<div class="main_news test">
+  <div class="title"><span class="more"><a href="#">查看全部</a></span>精彩资讯</div>
+  <div class="content">
+    <ul class="news_ul">
+      <!--<li class="zx_li">
+      	<a href="###">
+        <div class="img fl"><img src="./files/banner.jpg"></div>
+        <div class="description">
+          <h4>【农业气象】寒露气候对农事有什么影响？</h4>
+          <p>寒露之后，天气常是昼暖夜凉，晴空万里，对秋收十分有利。干旱少雨往往给冬小麦的适时播种带来困难，成为旱地小麦争取高产的主要限制因子之一。海南和西南地区这时一般仍然是秋雨连绵，少数年份江淮和江南也会出现阴雨天气，对秋收秋种有一定的影响。“寒露不摘棉，霜打莫怨天”。趁天晴要抓紧采收棉花，遇降温早的年份，还可以趁气温不算太低时把棉花收回来。江淮及江南的单季晚稻即将成熟，双季晚稻正在灌浆，要注意间歇灌溉，保持田间湿润。南方稻区还要注意防御“寒露风”的危害。华北地区要抓紧播种小麦，这时，若遇干旱少雨的天气应设法造墒抢墒播种，保证在霜降前后播完，切不可被动等雨导致早茬种晚麦。寒露前后是长江流域直播油菜的适宜播种期，品种安排上应先播甘蓝型品种，后播白菜型品种。淮河以南的绿肥播种要抓紧扫尾，已出苗的要清沟沥水，防止涝渍。华北平原的甘薯薯块膨大逐渐停止，这时清晨的气温在10℃以下或更低的机率逐渐增大，应根据天气情况抓紧收获，争取在早霜前收完，否则在地里经受低温时间过长，会因受冻而导致薯块“硬心”，降低食用、饲用和工业用价值，也不能贮藏或作种用。（来源：东方天气网）</p>
+        </div>
+      	</a>
+      </li>-->
+    </ul>
+  </div>
+</div>
+
+<div class="main_video test">
+  <div class="title"><span class="more"><a href="#">查看全部</a></span>精彩视频</div>
+  <div class="content">
+    <ul class="video_ul">
+      
+    </ul>
+  </div>
+</div>
+<div class="main_text test"> 
+  <!--<div class="title">专题介绍</div>-->
+ 
+</div>
+</div>
+</body>
+<script type="text/javascript">
+	jQuery(function ($){
+			function GetRequest() {
+				var url = location.search; //获取url中"?"符后的字串
+				if(url.indexOf("?") != -1) { //判断是否有参数
+					var str = url.substr(1); //从第一个字符开始 因为第0个是?号 获取所有除问号的所有符串
+					strs = str.split("="); //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
+					return strs[1] //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
+				}
+			}
+			var sid = GetRequest();
+//			console.log(sid);
+			var sds = null;
+			var sj = 1;
+			$.ajaxSetup({ 
+			    async : false 
+			});
+			function ax1(urls,obj){
+				$.post(urls,obj,function(data) {
+				sds=data;
+				}, "json");
+			}
+			var hm1='';
+			var hm2='';
+			var hm3='';
+			var hm4='';
+			ax1("http://ms.meihaojy.com/rest.php?s=web/index",{'method':'fosung.app.web.special.index','id':sid});
+			console.log(sds);
+			//判断banner图有没有
+			
+			if(sds.data.pic_url==''){
+				$('.banner').eq(0).hide();
+			}else {
+				$('.banner img').eq(0).attr('src',sds.data.pic_url);
+			}
+			// 加载主体内容
+			$.each(sds.data.zt_data,function (itm){// 循环第一遍
+				if(sds.data.zt_data[itm].tmp_name=='expert'){// 专家
+					$('.main_expert').eq(0).attr('pxorder',itm);
+					$('.main_expert').eq(0).show();
+					$('.main_expert .more a').eq(0).attr('href','ZTzhuanjialist.html?id='+sid); 
+					$.each(sds.data.zt_data[itm].datalist, function(inx){
+						hm1+='<li class="ex_li swiper-slide swiper-slide-active" style="width: 90px; margin-right: 5px;">';
+						hm1+='<a href=zhuanjiageren.html?lecturer_id='+sds.data.zt_data[itm].datalist[inx].id+'><div class="img">';
+						if(sds.data.zt_data[itm].datalist[inx].head_icon==''){
+								hm1+='<img src="files/banner.jpg"/>';
+						}else {
+								hm1+='<img src='+sds.data.zt_data[itm].datalist[inx].head_icon+' />';
+						}
+						hm1+='<div class="name">'+sds.data.zt_data[itm].datalist[inx].username+'</div></div></a></li>';
+					});
+					$('.swiper-wrapper').eq(0).html(hm1);
+				}else if(sds.data.zt_data[itm].tmp_name=='news'){//新闻
+						$('.main_news').eq(0).attr('pxorder',itm);
+					$('.main_news').eq(0).show();
+					$('.main_news .more a').eq(0).attr('href','ZTnews-list.html?id='+sid); 
+					$.each(sds.data.zt_data[itm].datalist, function(inx) {
+						hm2+='<li class="zx_li"><a href=xiaoxixiangqing.html?message_id='+sds.data.zt_data[itm].datalist[inx].id+'> <div class="img fl">';
+						if(sds.data.zt_data[itm].datalist[inx].news_imgs==''||sds.data.zt_data[itm].datalist[inx].news_imgs==null){
+								hm2+='<img src="files/banner.jpg"/></div><div class="description">';
+						}else {
+							hm2+='<img src='+sds.data.zt_data[itm].datalist[inx].news_imgs+' /></div><div class="description">';
+						}
+						hm2+='<h4>'+sds.data.zt_data[itm].datalist[inx].title+'</h4>';
+						hm2+='<p>'+sds.data.zt_data[itm].datalist[inx].content+'</p></div></a></li>';
+							
+					});
+					$('.news_ul').eq(0).html(hm2);
+				}else if(sds.data.zt_data[itm].tmp_name=='video'){// 视频
+					$('.main_video').eq(0).attr('pxorder',itm);
+					$('.main_video').eq(0).show();
+					$('.main_video .more a').eq(0).attr('href','ZTvideo-list.html?id='+sid); 
+					$.each(sds.data.zt_data[itm].datalist, function(inx) {
+					hm3+='<li class="sp_li"><a href=zhiboxiangqing.html?v_id='+sds.data.zt_data[itm].datalist[inx].id+'>';
+					if(sds.data.zt_data[itm].datalist[inx].video_img==''||sds.data.zt_data[itm].datalist[inx].video_img==null){
+						hm3+='<div class="img fl lyps" style="background-image:url(./files/banner.jpg);">';
+					}else {
+						hm3+='<div class="img fl lyps" style="background-image:url('+sds.data.zt_data[itm].datalist[inx].video_img+')">';
+					}
+					hm3+='<p id="Lzb"> <img src="./files/ico.png"> <span class="ss">'+sds.data.zt_data[itm].datalist[inx].when_long+'</span></p></div>';
+					hm3+=' <div class="description"><h4>'+sds.data.zt_data[itm].datalist[inx].video_name+'</h4><p>';
+					if(sds.data.zt_data[itm].datalist[inx].video_type_name=='回顾'){
+						hm3+='<span class="type huigu">回顾</span>讲师:';
+					}else if(sds.data.zt_data[itm].datalist[inx].video_type_name=='点播'){
+						hm3+='<span class="type dianbo">点播</span>讲师:';
+					}else if(sds.data.zt_data[itm].datalist[inx].video_type_name=='直播'){
+						hm3+='<span class="type zhibo">直播</span>讲师:';
+					}else if(sds.data.zt_data[itm].datalist[inx].video_type_name=='预约'){
+						hm3+='<span class="type yuyue">预约</span>讲师:';
+					}
+					hm3+='<span>'+sds.data.zt_data[itm].datalist[inx].moderator_acct+'</span></p></div></a></li>'
+					});
+					$('.video_ul').eq(0).html(hm3);
+				}else if(sds.data.zt_data[itm].tmp_name=='image-text'){
+					$('.main_text').eq(0).attr('pxorder',itm);
+					$('.main_text').eq(0).show();
+					$('.main_text .content').eq(0).html(sds.data.zt_data[itm].datalist);
+				}
+			})
+			//专题首页 div 动态排序
+			function orderDiv(){
+			  var divTestJQ = $("#box"); //取得容器对象
+			    var divJQ = $(">div.test", divTestJQ); //取容器需要重排的对象
+			    var EntityList = []; //定义一个数组用于存放要排序的对象
+			    divJQ.each(function () {
+			        var thisJQ = $(this);
+			        EntityList.push({ Name: parseInt(thisJQ.attr("pxorder"), 10), JQ: thisJQ }); //把要排序的对象和排序的值一起放到一个新的对象里，并存入到数组
+			    });
+			    EntityList.sort(function (a, b) { //利用数组的排序方法重新排序对象
+			        //return b.Name - a.Name; //从大到小
+			        return a.Name - b.Name; //从小到大
+			    });
+			    for (var i = 0; i < EntityList.length; i++) {
+			        EntityList[i].JQ.appendTo(divTestJQ); //把排序完的对象重新插入到容器对象
+			    };
+			}
+			orderDiv();// 排序执行
+//			专家左右滑动
+			var swiper = new Swiper('.swiper-container', {
+				pagination: '.swiper-pagination',
+				slidesPerView: 4,
+				paginationClickable: true,
+				spaceBetween:5,
+				freeMode: true
+			});
+		})
+</script>
+</html>
